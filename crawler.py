@@ -2,10 +2,6 @@ from bs4 import BeautifulSoup
 import urllib2
 from urlparse import urlparse, urljoin
 
-Frontier = []
-Seen = []
-Harvest = []
-
 class Crawl:
     def __init__(self, url):
         self.url = url
@@ -17,11 +13,13 @@ class Crawl:
         self.url = redirect_url
         redirect_object = urllib2.urlopen(self.url)
         self.object = redirect_object
+        return self.url
             
     def duplicate_checker(self):
         return self.url in Seen
 
     def link_extractor(self):
+        url_list = []
         if not(self.object):
             self.object = urllib2.urlopen(self.url)
         text = self.object.read()
@@ -31,4 +29,5 @@ class Crawl:
             parse_result = urlparse(current_url)
             if not(parse_result.scheme):
                 current_url = urljoin(self.url, current_url)
-            Frontier.append(current_url)
+            url_list.append(current_url)
+        return url_list

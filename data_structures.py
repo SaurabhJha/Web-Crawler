@@ -1,8 +1,11 @@
-from collections import deque
-
-Frontier = deque()
+from tools import binsearch
 
 class Seen(list):
+    """
+    Data structure used to keep a list of url that have been
+    downloaded. It's attribute is a sorted list named as array.
+
+    """
     def __init__(self, array = None):
         if (array == None):
             self.array = []

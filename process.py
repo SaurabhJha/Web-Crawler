@@ -1,28 +1,23 @@
+from crawler import Bot
+from data_structures import Seen
 from collections import deque
 
-class Seen(list):
-    def __init__(self, array = None):
-        if (array == None):
-            self.array = []
-        else:
-            self.array = sorted(array)
-    def __contains__(self, item):
-        if self.index(item) != None:
-            return True
-        else:
-            return False
-    def append(self, item):
-        self.array.append(item)
-        self.array = sorted(self.array)
-    def index(self, item):
-        return binsearch(item, self.array, 0, len(self.array))
+class Process:
+     def __init__(self, url):
+          self.url = url
+          self.seen = Seen()
+          self.frontier = deque()
+          self.level = 0
 
-
-def process(seed_url):
-     c = Bot(seed_url)
-     print seed_url
-     url = c.crawl()
-     s = Seen()
-     s.append(url)
-     for link in c.filter_links(1):
-          process(link)
+     def run(self, url = None, level_limit = None):
+          if self.level = 
+          if url == None:
+               url = self.url
+          if url in self.seen:
+               return None
+          b = Bot(url)
+          redirect_url = b.crawl()
+          self.seen.append(redirect_url)
+          links = b.link_extractor()
+          for l in links:
+               self.frontier.append(l)

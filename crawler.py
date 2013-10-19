@@ -5,8 +5,8 @@ from urlparse import urlparse, urljoin
 class Bot:
     def __init__(self, url):
         """
-        The constructor initializes a Bot object with url and and object
-        attribute. The object attribute is supposed to be url object after
+        The constructor initializes a Bot object with url and object
+        attributes. The object attribute is supposed to be url object after
         it's downloaded. The object attribute is initialized in crawl
         method.
 
@@ -43,7 +43,7 @@ class Bot:
     def duplicate_checker(self):
         """
         Checks if the url is already downloaded previously by a look-up to
-        Seen data structure.
+        an instance of Seen data structure.
 
         """
         return self.url in Seen
@@ -53,7 +53,7 @@ class Bot:
         Returns a list of links that are in the webpage addressed by url
         attribute. If links are relative, they are converted to absolute
         links.
-        If the webpage is not perviously downloaded, the webpage is
+        If the webpage is not already downloaded, the webpage is
         downloded first and then links are extracted from that webpage.
 
         Examples
@@ -66,7 +66,7 @@ class Bot:
 
         """
         url_list = []
-        if not(self.object):
+        if not(self.object): #tests if webpage is downloaded
             self.object = urllib2.urlopen(self.url)
         text = self.object.read()
         soup = BeautifulSoup(text)
@@ -74,7 +74,7 @@ class Bot:
             current_url = link.get('href')
             parse_result = urlparse(current_url)
             if not(parse_result.scheme):
-                current_url = urljoin(self.url, current_url)
+                current_url = urljoin(self.url, current_url) #converts a realtive url to an absoulte url
             url_list.append(current_url)
         return url_list
 

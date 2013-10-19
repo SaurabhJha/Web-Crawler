@@ -33,7 +33,11 @@ class Bot:
         'http://www.google.co.in/?gws_rd=cr&ei=aHhhUuaiHcHmswbu4IDoAg'
 
         """
-        url_object = urllib2.urlopen(self.url)
+        try:
+            url_object = urllib2.urlopen(self.url)
+        except urllib2.URLError:
+            print "No download allowed"
+            return 
         redirect_url = url_object.geturl()
         self.url = redirect_url
         redirect_object = urllib2.urlopen(self.url)

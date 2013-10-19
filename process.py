@@ -1,6 +1,7 @@
 from crawler import Bot
 from collections import deque
 from urlparse import urlparse
+import urllib2
 
 class Process:
      """
@@ -20,24 +21,33 @@ class Process:
           self.frontier = deque()
           self.harvest = []
 
-     def run(self, url = None):
+     def run(self, custom_url = None):
           """
           Performs the actual crawling. Comes with an optional argument
           If an explicit url is specified, the run takes that url as
           seed.
           """
-          if url == None:
-               url = self.url
-          if url in self.seen:
-               return None
-          b = Bot(url)
-          redirect_url = b.crawl()
-          print redirect_url #for tracking purposes
-          self.harvest.append(redirect_url)
-          self.seen.append(redirect_url)
-          links = b.link_extractor()
-          for l in links:
-               parse_result = urlparse(l)
-               self.frontier.append(l)
-          for l in self.frontier:
-               self.run(l)
+          if custom_url == None:
+               current_url = self.url
+          else:
+               current_url = custom_url
+          b = Bot(current_url)
+          try :
+               downloaded_url = b.crawl()
+          except AttributeError:
+               current_url = self.frontier.popleft()
+               downloaded_url = b.crawl()
+          except urllib2.URLError:
+               current_url = self.frontier.popleft()
+               downloaded_url = b.crawl()               
+          downloaded_url = b.crawl()
+          print downloaded_url
+          self.seen.append(downloaded_url)
+          self.harvest.append(downloaded_url)
+          current_links = b.link_extractor()
+          for link in current_links:
+               self.frontier.append(link)
+          while len(self.frontier) != 0:
+               link = self.frontier.popleft()
+               self.run(link)
+               

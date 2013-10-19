@@ -39,22 +39,12 @@ class Bot:
         redirect_object = urllib2.urlopen(self.url)
         self.object = redirect_object
         return self.url
-            
-    def duplicate_checker(self):
-        """
-        Checks if the url is already downloaded previously by a look-up to
-        an instance of Seen data structure.
-
-        """
-        return self.url in Seen
 
     def link_extractor(self):
         """
         Returns a list of links that are in the webpage addressed by url
         attribute. If links are relative, they are converted to absolute
         links.
-        If the webpage is not already downloaded, the webpage is
-        downloded first and then links are extracted from that webpage.
 
         Examples
         ========
@@ -66,8 +56,7 @@ class Bot:
 
         """
         url_list = []
-        if not(self.object): #tests if webpage is downloaded
-            self.object = urllib2.urlopen(self.url)
+        self.crawl()
         text = self.object.read()
         soup = BeautifulSoup(text)
         for link in soup.find_all('a'):
@@ -85,11 +74,18 @@ class Bot:
         urls that have same netloc as parent url. If filter_attribute
         is set to 0, it will return the urls that have different urls
         then parent url.
-        The filter_attribute is 1 by default.
-        
+
+        Examples
+        ========
+        >>> from crawler import Bot
+        >>> b = Bot('http://www.saurabhjha.me')
+        >>> b.filter_links(1)
+        ['http://www.saurabhjha.me/software.html']
+
         """
         if filter_attribute != 1 and filter_attribute != 2:
             raise AttributeError('filter_attribute can only be 1 or 2')
+        self.crawl()
         result = []
         url_list = self.link_extractor()
         parse_url = urlparse(self.url)

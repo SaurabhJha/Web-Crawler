@@ -8,6 +8,7 @@ class Process:
           self.seen = Seen()
           self.frontier = deque()
           self.level = 0
+          self.harvest = []
 
      def run(self, url = None):
           if url == None:
@@ -16,7 +17,10 @@ class Process:
                return None
           b = Bot(url)
           redirect_url = b.crawl()
+          self.harvest.append(redirect_url)
           self.seen.append(redirect_url)
           links = b.link_extractor()
           for l in links:
                self.frontier.append(l)
+          for l in self.frontier:
+               self.run(l)

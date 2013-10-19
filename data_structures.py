@@ -9,7 +9,10 @@ class Seen(list):
         else:
             self.array = sorted(array)
     def __contains__(self, item):
-        pass
+        if self.index(item) != None:
+            return True
+        else:
+            return False
     def append(self, item):
         self.array.append(item)
         self.array = sorted(self.array)

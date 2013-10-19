@@ -9,8 +9,7 @@ class Process:
           self.frontier = deque()
           self.level = 0
 
-     def run(self, url = None, level_limit = None):
-          if self.level = 
+     def run(self, url = None):
           if url == None:
                url = self.url
           if url in self.seen:

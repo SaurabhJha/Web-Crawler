@@ -30,6 +30,8 @@ class Process:
           In summary, it performs a breadth first search from the seed url.
 
           """
+          if url in self.seen:
+               url = self.frontier.popleft()
           b = Bot(url)
           try:
                downloaded_url = b.crawl()
